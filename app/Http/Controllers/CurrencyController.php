@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Currency;
 use Illuminate\Http\Request;
+use Throwable;
 
 class CurrencyController extends Controller
 {
@@ -12,7 +13,20 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $currencies = Currency::all();
+
+            return response()->json([
+                'data' => $currencies,
+                'succes' => true,
+                'message' => 'Liste des monnaies',
+            ]);
+              } catch (Throwable $e) {
+                  return response()->json([
+                      'message' => 'Une erreur s\'est produite',
+                      'data' => $e->getMessage(),
+                  ]);
+              }
     }
 
     /**

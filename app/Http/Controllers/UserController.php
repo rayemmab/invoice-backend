@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -12,7 +13,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $currencies = User::all();
+
+            return response()->json([
+                'data' => $currencies,
+                'succes' => true,
+                'message' => 'Liste des monnaies',
+            ]);
+              } catch (Throwable $e) {
+                  return response()->json([
+                      'message' => 'Une erreur s\'est produite',
+                      'data' => $e->getMessage(),
+                  ]);
+              }
     }
 
     /**

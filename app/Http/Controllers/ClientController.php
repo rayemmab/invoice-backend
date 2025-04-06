@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class ClientController extends Controller
 {
@@ -13,9 +14,20 @@ class ClientController extends Controller
      */
     public function index()
     {
-        // Récupère tous les clients avec leur devise préférée
-        $clients = Client::with('preferredCurrency')->get();
-        return response()->json($clients);
+        try {
+      $clients = Client::with('preferredCurrency')->get();
+
+      return response()->json([
+          'data' => $clients,
+          'succes' => true,
+          'message' => 'Liste des clients',
+      ]);
+        } catch (Throwable $e) {
+            return response()->json([
+                'message' => 'Une erreur s\'est produite',
+                'data' => $e->getMessage(),
+            ]);
+        }
     }
 
     /**
